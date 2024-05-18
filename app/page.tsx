@@ -2,9 +2,17 @@ import React from "react";
 import Chat from "./chat";
 import { openai } from "@/utils/openai";
 import { cookies } from "next/headers";
+import { Message } from "ai/react";
 import PasswordPromptDialog from "./components/auth/password-prompt";
+import { Button } from "@/components/ui/button";
+import { createClient } from "@/utils/supabase/server";
+import Link from "next/link";
 
-const Page = async ({ searchParams }: { searchParams: { thread: string } }) => {
+const Page = async ({
+  searchParams,
+}: {
+  searchParams: { thread?: string };
+}) => {
   const cookiesStore = cookies();
 
   const loginCookies = cookiesStore.get("hasAccess");
@@ -14,18 +22,83 @@ const Page = async ({ searchParams }: { searchParams: { thread: string } }) => {
     return <PasswordPromptDialog />;
   }
 
+  const supabase = createClient();
   const userId = cookiesStore.get("userId")?.value;
-  const emptyThreadIdFromCookie = cookiesStore.get("threadId");
-  const emptyThread =
-    searchParams.thread ?? (await openai.beta.threads.create()).id;
+  const { data: threads, error } = await supabase
+    .from("cbt_threads")
+    .select("created_at, thread_id, thread_name")
+    .eq("user", userId)
+    .order("created_at", { ascending: false })
+    .limit(10);
+
+  let startingThread = searchParams.thread;
+
+  async function createThread() {
+    const thread = await openai.beta.threads.create();
+    const { data, error } = await supabase
+      .from("cbt_threads")
+      .insert({ thread_id: thread.id, user: userId });
+    console.log(data, error);
+    return thread;
+  }
+  // if empty thread has already been created, use that
+  const emptyChatFromDB = threads?.filter(
+    (x) => x.thread_name === "New chat"
+  )?.length;
+  if (!startingThread && emptyChatFromDB && emptyChatFromDB > 0) {
+    startingThread = threads?.filter((x) => x.thread_name === "New chat")[0]
+      .thread_id;
+  }
+  // Only create a new empty thread if there are no empty threads
+  if (!startingThread && emptyChatFromDB === 0) {
+    console.log("No threads found, creating one");
+    startingThread = (await createThread()).id;
+  }
+
+  const activeThreadFromList = threads?.find(
+    (x) => x.thread_id === startingThread
+  );
+
+  const isNewChat =
+    !activeThreadFromList || activeThreadFromList?.thread_name === "New chat";
+
+  const messages: Message[] = !isNewChat
+    ? (await openai.beta.threads.messages.list(startingThread as string)).data
+    .sort((a, b) => a.created_at - b.created_at)
+    // convert to correct type for ai sdk
+        .map((x) => ({
+          id: x.id,
+          role: x.role,
+          content: x.content[0].text?.value,
+          data: "",
+        }))
+    : [];
+
   return (
-    <div>
-      {emptyThread}
-      <pre>{JSON.stringify(searchParams.thread, null, 2)}</pre>
-      <form action={handleLogOut}>
-        <button type="submit">Logout</button>
-      </form>
-      <Chat threadId={emptyThread} />
+    <div className="min-h-lvh grid place-items-center">
+      <div>
+        {startingThread}
+        <br />
+        <br />
+        {isNewChat ? "New chat" : "existing chat"}
+        <pre>{JSON.stringify(searchParams.thread, null, 2)}</pre>
+        <div className="fixed top-0 right-0 m-4">
+          <form action={handleLogOut}>
+            <Button type="submit">Logout</Button>
+          </form>
+        </div>
+        <Chat threadId={startingThread} messageData={messages} />
+        <div className="text-xs">
+          <Link href={`/`}>New chat</Link>
+          {threads?.map((thread) => (
+            <Link href={`/?thread=${thread.thread_id}`} key={thread.thread_id}>
+              {thread.thread_name}
+              <br />
+              <pre>{JSON.stringify(thread, null, 2)}</pre>
+            </Link>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

@@ -1,6 +1,8 @@
 // components/PasswordPromptDialog.tsx
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
@@ -29,17 +31,23 @@ const PasswordPromptDialog = () => {
   };
 
   return (
-    <div className="password-prompt-dialog">
+    <div className="min-h-screen grid place-items-center">
       {passwordIncorrect && <p>Password incorrect</p>}
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="password">Password:</label>
-        <input
+      <form onSubmit={handleSubmit} className="w-screen max-w-lg grid gap-4">
+        {/* <label htmlFor="password">Password:</label> */}
+        <h1 className="text-center font-extrabold text-3xl lg:text-5xl mb-8">
+          Halt, traveller 🔒
+        </h1>
+        <Input
           type="password"
           id="password"
+          className="text-center"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          placeholder="What's the password?"
+          autoFocus
         />
-        <button type="submit">Submit</button>
+        <Button type="submit">Submit</Button>
       </form>
     </div>
   );
