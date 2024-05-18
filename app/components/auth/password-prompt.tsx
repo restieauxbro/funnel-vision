@@ -47,7 +47,7 @@ const PasswordPromptDialog = () => {
           placeholder="What's the password?"
           autoFocus
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit">{loading ? "Loading..." : "Enter"}</Button>
       </form>
     </div>
   );

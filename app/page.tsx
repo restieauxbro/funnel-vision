@@ -31,7 +31,7 @@ const Page = async ({
     .select("created_at, thread_id, thread_name")
     .eq("user", userId)
     .order("created_at", { ascending: false })
-    .limit(10);
+    .limit(20);
 
   let startingThread = searchParams.thread;
 
@@ -39,7 +39,7 @@ const Page = async ({
     const thread = await openai.beta.threads.create();
     const { data, error } = await supabase
       .from("cbt_threads")
-      .insert({ thread_id: thread.id, user: userId });
+      .insert({ thread_id: thread.id, user: userId, created_at: new Date() });
     console.log(data, error);
     return thread;
   }

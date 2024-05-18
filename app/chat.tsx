@@ -29,10 +29,11 @@ export default function Chat({
   const router = useRouter();
   const searchParams = useSearchParams();
   const thread = searchParams.get("thread");
+  const newChat = searchParams.get("new");
 
   useEffect(() => {
     setMessages([]);
-  }, [thread]);
+  }, [thread, newChat]);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -48,15 +49,15 @@ export default function Chat({
       );
       console.log(data, error);
     }
-    // router.push(`/?thread=${threadId}`);
-    submitMessage(e);
+    await submitMessage(e);
   };
 
   return (
     <div className="w-screen max-w-screen-sm py-12">
       <LayoutGroup>
-        <MessageList messages={messageData} {...{ threadId }} />
-        <MessageList messages={messages} {...{ threadId }} />
+        <MessageList
+          {...{ threadId, messages, startingMessages: messageData }}
+        />
 
         {status === "in_progress" && <div />}
 
@@ -81,48 +82,48 @@ export default function Chat({
 
 const MessageList = ({
   messages,
+  startingMessages,
   threadId,
 }: {
   messages: Message[];
+  startingMessages?: Message[];
   threadId?: string;
 }) => {
   return (
     <AnimatePresence mode="popLayout">
-      {
-        messages.map((message, i) => {
-          const isUser = message.role === "user";
-          return (
-            <motion.div
-              key={i + `-${threadId}`}
-              exit={{ opacity: 0, y: 10 }}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={cn(
-                "min-h-[5.5rem] py-8 relative",
-                i !== 0 && "border-t"
-              )}
-              layout
-              transition={{ type: "spring", stiffness: 320, damping: 20 }}
-            >
-              <ResizingContainer className="overflow-hidden" heightOnly>
-                <div
-                  className={cn(
-                    "absolute top-7 -left-16 size-8 bg-slate-600 border border-slate-600 rounded grid place-items-center text-white/80",
-                    isUser && "bg-white text-slate-700"
-                  )}
-                >
-                  {i % 2 === 0 ? (
-                    <User strokeWidth={1.5} size={20} />
-                  ) : (
-                    <Sparkles strokeWidth={1.5} size={20} />
-                  )}
-                </div>
-                {message.content}
-              </ResizingContainer>
-            </motion.div>
-          );
-        })
-      }
+      {[...(startingMessages || []), ...messages].map((message, i) => {
+        const isUser = message.role === "user";
+        return (
+          <motion.div
+            key={i + `-${threadId}`}
+            exit={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={cn(
+              "min-h-[5.5rem] py-8 relative",
+              i !== 0 && "border-t"
+            )}
+            layout
+            transition={{ type: "spring", stiffness: 320, damping: 20 }}
+          >
+            <ResizingContainer className="overflow-hidden" heightOnly>
+              <div
+                className={cn(
+                  "absolute top-7 -left-16 size-8 bg-slate-600 border border-slate-600 rounded grid place-items-center text-white/80",
+                  isUser && "bg-white text-slate-700"
+                )}
+              >
+                {i % 2 === 0 ? (
+                  <User strokeWidth={1.5} size={20} />
+                ) : (
+                  <Sparkles strokeWidth={1.5} size={20} />
+                )}
+              </div>
+              {message.content}
+            </ResizingContainer>
+          </motion.div>
+        );
+      })}
     </AnimatePresence>
   );
 };
