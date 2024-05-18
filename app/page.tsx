@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import Sidebar from "./sidebar";
+import { LogOut } from "lucide-react";
 
 const Page = async ({
   searchParams,
@@ -83,7 +84,11 @@ const Page = async ({
         <div>
           <div className="fixed top-0 right-0 m-4">
             <form action={handleLogOut}>
-              <Button type="submit">Logout</Button>
+              <Button type="submit" size="sm" variant={"secondary"}>
+                <div className="flex gap-1.5 items-center">
+                  Log out <LogOut size={14} />
+                </div>
+              </Button>
             </form>
           </div>
           <Chat threadId={startingThread} messageData={messages} />

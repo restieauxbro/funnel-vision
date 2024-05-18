@@ -68,7 +68,7 @@ export default function Chat({
           <Input
             disabled={status !== "awaiting_message"}
             value={input}
-            className="bg-slate-50 px-6 py-6 rounded-full focus-visible:ring-0"
+            className="bg-slate-50 px-6 py-6 rounded-full focus-visible:ring-0 focus-visible:ring-transparent"
             placeholder="Ask something"
             onChange={handleInputChange}
             autoFocus
@@ -89,14 +89,13 @@ const MessageList = ({
   return (
     <AnimatePresence mode="popLayout">
       {
-        // View messages in UI state
         messages.map((message, i) => {
           const isUser = message.role === "user";
           return (
             <motion.div
               key={i + `-${threadId}`}
-              exit={{ opacity: 0, y: 20 }}
-              initial={{ opacity: 0, y: 20 }}
+              exit={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className={cn(
                 "min-h-[5.5rem] py-8 relative",
