@@ -79,9 +79,11 @@ const Page = async ({
 
   return (
     <div className="flex">
-      <Sidebar {...{ threads }} />
-      <div className="min-h-lvh grid place-items-center p-4 grow">
-        <div>
+      <div className="hidden lg:block">
+        <Sidebar {...{ threads }} />
+      </div>
+      <div className="min-h-lvh grid place-items-center grow">
+        <div className="p-0">
           <div className="fixed top-0 right-0 m-4">
             <form action={handleLogOut}>
               <Button type="submit" size="sm" variant={"secondary"}>
