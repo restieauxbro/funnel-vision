@@ -7,6 +7,7 @@ import PasswordPromptDialog from "./components/auth/password-prompt";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
+import Sidebar from "./sidebar";
 
 const Page = async ({
   searchParams,
@@ -64,39 +65,28 @@ const Page = async ({
 
   const messages: Message[] = !isNewChat
     ? (await openai.beta.threads.messages.list(startingThread as string)).data
-    .sort((a, b) => a.created_at - b.created_at)
-    // convert to correct type for ai sdk
+        .sort((a, b) => a.created_at - b.created_at)
+        // convert to correct type for ai sdk
         .map((x) => ({
           id: x.id,
           role: x.role,
+          // @ts-ignore
           content: x.content[0].text?.value,
           data: "",
         }))
     : [];
 
   return (
-    <div className="min-h-lvh grid place-items-center">
-      <div>
-        {startingThread}
-        <br />
-        <br />
-        {isNewChat ? "New chat" : "existing chat"}
-        <pre>{JSON.stringify(searchParams.thread, null, 2)}</pre>
-        <div className="fixed top-0 right-0 m-4">
-          <form action={handleLogOut}>
-            <Button type="submit">Logout</Button>
-          </form>
-        </div>
-        <Chat threadId={startingThread} messageData={messages} />
-        <div className="text-xs">
-          <Link href={`/`}>New chat</Link>
-          {threads?.map((thread) => (
-            <Link href={`/?thread=${thread.thread_id}`} key={thread.thread_id}>
-              {thread.thread_name}
-              <br />
-              <pre>{JSON.stringify(thread, null, 2)}</pre>
-            </Link>
-          ))}
+    <div className="flex">
+      <Sidebar {...{ threads }} />
+      <div className="min-h-lvh grid place-items-center p-4 grow">
+        <div>
+          <div className="fixed top-0 right-0 m-4">
+            <form action={handleLogOut}>
+              <Button type="submit">Logout</Button>
+            </form>
+          </div>
+          <Chat threadId={startingThread} messageData={messages} />
         </div>
       </div>
     </div>
