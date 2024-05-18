@@ -70,7 +70,7 @@ export default function Chat({
             <Input
               disabled={status !== "awaiting_message"}
               value={input}
-              className="bg-slate-50 px-6 py-6 rounded-full focus-visible:ring-0 focus-visible:ring-transparent"
+              className="bg-slate-50 px-6 py-6 rounded-full focus-visible:ring-0 focus-visible:ring-transparent text-base"
               placeholder="Ask something"
               onChange={handleInputChange}
               autoFocus

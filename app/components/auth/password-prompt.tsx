@@ -33,7 +33,7 @@ const PasswordPromptDialog = () => {
   return (
     <div className="min-h-screen grid place-items-center">
       {passwordIncorrect && <p>Password incorrect</p>}
-      <form onSubmit={handleSubmit} className="w-screen max-w-md grid gap-4">
+      <form onSubmit={handleSubmit} className="w-screen max-w-md grid gap-4 px-4">
         {/* <label htmlFor="password">Password:</label> */}
         <h1 className="text-center font-extrabold text-3xl lg:text-4xl mb-8">
           Halt, traveller 🔒
