@@ -10,6 +10,7 @@ export async function POST(req: Request) {
 
   // Create a thread if needed
   const threadId = input.threadId ?? (await openai.beta.threads.create({})).id;
+  console.log(threadId);
 
   // Add a message to the thread
   const createdMessage = await openai.beta.threads.messages.create(threadId, {
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
       // Run the assistant on the thread
       const runStream = openai.beta.threads.runs.stream(threadId, {
         assistant_id:
-          "asst_pmmBxtWkwoq1PlUp8rG6vfbM" ?? // hardcoded assistant id for now
+          "asst_lFHgp3REHCt2FbO4hSa5miwW" ?? // hardcoded assistant id for now
           (() => {
             throw new Error("ASSISTANT_ID is not set");
           })(),

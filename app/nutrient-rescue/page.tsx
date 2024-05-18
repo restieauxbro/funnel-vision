@@ -398,7 +398,7 @@ function PeopleCarousel() {
                           watch
                         </div>
                         <div className="self-stretch mt-4 text-4xl leading-10">
-                          Samsara's story
+                          {" Samsara's story"}
                         </div>
                         <img
                           loading="lazy"
@@ -427,7 +427,7 @@ function PeopleCarousel() {
                         watch
                       </div>
                       <div className="self-stretch mt-4 text-4xl leading-10">
-                        Stefanie's story
+                        {" Stefanie's story"}
                       </div>
                       <img
                         loading="lazy"
@@ -456,7 +456,7 @@ function PeopleCarousel() {
                           watch
                         </div>
                         <div className="self-stretch mt-4 text-4xl leading-10">
-                          Ashleigh's story
+                          {" Ashleigh's story"}
                         </div>
                         <img
                           loading="lazy"
@@ -596,8 +596,9 @@ function ProductShow() {
               Double Shot scoop, and a fridge magnet.
             </div>
             <div className="text-base leading-7 text-neutral-600 max-md:max-w-full">
-              Your Wellness Guarantee - we promise a full refund if you don't
-              feel better after 30
+              {
+                "Your Wellness Guarantee - we promise a full refund if you don't feel better after 30"
+              }
               <br />
               days of taking the shots daily.
             </div>
