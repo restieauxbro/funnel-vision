@@ -54,29 +54,28 @@ export default function Chat({
 
   return (
     <div className="w-screen max-w-screen-sm py-12 px-4">
-      <div className="">
+      <div className="pb-32">
         <LayoutGroup>
           <MessageList
             {...{ threadId, messages, startingMessages: messageData }}
           />
 
           {status === "in_progress" && <div />}
-
-          <motion.form
-            onSubmit={handleSubmit}
-            layout
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          >
+        </LayoutGroup>
+      </div>
+      <div className="absolute bottom-0 left-0 p-4 pb-24 w-full">
+        <div className="w-screen max-w-screen-sm mx-auto">
+          <form onSubmit={handleSubmit}>
             <Input
               disabled={status !== "awaiting_message"}
               value={input}
-              className="bg-slate-50 px-6 py-6 rounded-full focus-visible:ring-0 focus-visible:ring-transparent text-base"
+              className="bg-slate-50 px-6 py-6 rounded-full focus-visible:ring-0 focus-visible:ring-transparent text-base border-slate-300"
               placeholder="Ask something"
               onChange={handleInputChange}
               autoFocus
             />
-          </motion.form>
-        </LayoutGroup>
+          </form>
+        </div>
       </div>
     </div>
   );
@@ -121,7 +120,7 @@ const MessageList = ({
                   <Sparkles strokeWidth={1.5} size={20} />
                 )}
               </div>
-              {message.content}
+              <div dangerouslySetInnerHTML={{ __html: message.content }} />
             </ResizingContainer>
           </motion.div>
         );

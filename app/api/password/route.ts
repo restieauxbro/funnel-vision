@@ -18,6 +18,7 @@ export async function POST(request: Request, params: { slug: string }) {
     cookieStore.set("userId", userId, {
       httpOnly: true,
       path: "/",
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
     });
   }
 

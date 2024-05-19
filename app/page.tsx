@@ -6,7 +6,6 @@ import { Message } from "ai/react";
 import PasswordPromptDialog from "./components/auth/password-prompt";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/server";
-import Link from "next/link";
 import Sidebar from "./sidebar";
 import { LogOut } from "lucide-react";
 
@@ -82,13 +81,13 @@ const Page = async ({
       <div className="hidden lg:block">
         <Sidebar {...{ threads }} />
       </div>
-      <div className="min-h-lvh grid place-items-center grow">
+      <div className="relative min-h-lvh grid place-items-center grow">
         <div className="p-0">
           <div className="fixed top-0 right-0 m-4">
             <form action={handleLogOut}>
               <Button type="submit" size="sm" variant={"secondary"}>
                 <div className="flex gap-1.5 items-center">
-                  Log out <LogOut size={14} />
+                  Log out <LogOut size={14} strokeWidth={2.5} />
                 </div>
               </Button>
             </form>
