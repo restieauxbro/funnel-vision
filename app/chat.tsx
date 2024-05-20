@@ -34,6 +34,7 @@ export default function Chat({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const allMessages = [...messageData, ...messages];
+  const userMessages = allMessages.filter((m) => m.role === "user");
 
   useEffect(() => {
     setMessages([]);
@@ -66,9 +67,24 @@ export default function Chat({
   }, [status]);
 
   return (
-    <div className="w-screen max-w-screen-sm py-12 px-4">
+    <div className="w-screen max-w-screen-sm py-12">
       <div className="pb-32">
         <LayoutGroup>
+          {userMessages.length === 0 && (
+            <motion.div
+              layout
+              exit={{ opacity: 0 }}
+              className="relative bg-slate-50 text-slate-700 text-left text-sm rounded-lg p-6 h-full hover:bg-slate-100 transition-colors"
+            >
+              <h1 className="text-3xl tracking-tight font-medium">
+                Bulk Nutrients Bot
+              </h1>
+              <p className="text-base mt-4 max-w-sm text-balance">
+                Ask something about the website and see how the base model
+                sources its information
+              </p>
+            </motion.div>
+          )}
           <MessageList {...{ threadId, messages: allMessages }} />
         </LayoutGroup>
       </div>
@@ -95,7 +111,7 @@ export default function Chat({
                       icon: <Baby strokeWidth={1.5} size={16} />,
                     },
                   ].map(({ text, icon }) => (
-                    <div className="pb-4">
+                    <div className="pb-4" key={text}>
                       <button
                         onMouseDown={() => {
                           append({ role: "user", content: text });
@@ -114,16 +130,24 @@ export default function Chat({
             </AnimatePresence>
           </ResizingContainer>
           <form onSubmit={handleSubmit}>
-            <Input
-              disabled={status !== "awaiting_message"}
-              value={input}
-              ref={inputRef}
-              key={threadId} // rerenders on page change and thus auto focuses
-              className="bg-slate-50 px-6 py-6 rounded-full focus-visible:ring-0 focus-visible:ring-transparent text-base border-slate-300"
-              placeholder="Ask something"
-              onChange={handleInputChange}
-              autoFocus
-            />
+            <div className="relative">
+              <Input
+                disabled={status !== "awaiting_message"}
+                value={input}
+                ref={inputRef}
+                key={threadId} // rerenders on page change and thus auto focuses
+                className="bg-slate-50 px-6 py-6 pr-12 relative rounded-full focus-visible:ring-0 focus-visible:ring-transparent text-base border-slate-300"
+                placeholder="Ask something"
+                onChange={handleInputChange}
+                autoFocus
+              />
+              <div
+                className={cn(
+                  "loading-spinner bg-slate-500 w-5 p-0.5 absolute top-0 right-0 m-3.5 transition-opacity opacity-0",
+                  status === "in_progress" && "opacity-100"
+                )}
+              ></div>
+            </div>
           </form>
         </div>
       </div>
