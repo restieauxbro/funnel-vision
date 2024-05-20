@@ -9,6 +9,8 @@ import { createClient } from "@/utils/supabase/server";
 import Sidebar from "./sidebar";
 import { LogOut } from "lucide-react";
 
+export const maxDuration = 90; // a minute and a half for streaming
+
 const Page = async ({
   searchParams,
 }: {
