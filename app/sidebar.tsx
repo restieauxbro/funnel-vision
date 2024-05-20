@@ -24,14 +24,14 @@ const Sidebar = ({
   return (
     <div className="sticky top-0 h-lvh bg-slate-100 border-r p-4">
       <div className="p-6 px-4 bg-white rounded-lg border shadow h-[calc(100lvh-2rem)] w-[18rem] overflow-y-auto">
-        <div className="grid text-sm truncate">
+        <div className="grid text-sm">
           <Button
             onClick={() => {
               router.push(`/?new=${newChat + 1}`);
               router.refresh();
             }}
             variant={"outline"}
-            className="py-3 text-left w-full justify-start px-2 mb-4"
+            className="py-3 text-left w-full justify-start px-2 mb-4 mr-4"
           >
             <div className="flex gap-2 items-center">
               <Plus size={16} strokeWidth={2.5} /> New chat
@@ -48,12 +48,17 @@ const Sidebar = ({
                     key={thread.thread_id}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     animate={{ opacity: 1 }}
-                    className="bg-white"
+                    className="bg-white max-w-[16rem] text-slate-700"
                   >
                     <Link href={`/?thread=${thread.thread_id}`} className="">
                       <div className="py-3 px-2">
                         <div className="font-medium flex gap-2 items-center">
-                          <MessageSquare size={12} strokeWidth={3} /> {thread.thread_name}
+                          <div className="aspect-square">
+                            <MessageSquare size={12} strokeWidth={3} />
+                          </div>{" "}
+                          <div className="whitespace-nowrap">
+                            {thread.thread_name}{" "}
+                          </div>
                         </div>
                         <div className="text-[0.7rem] font-light text-slate-500">
                           {new Date(thread.created_at).toLocaleString("en-AU", {
