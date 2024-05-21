@@ -5,7 +5,7 @@ export async function POST(request: NextRequest, params: { slug: string }) {
   const data: { password: string } = await request.json();
   const password = data.password;
 
-  const ip = request.ip;
+  const ip = request.headers.get("X-Forwarded-For");
   console.log({ ip });
   const cookieStore = cookies();
   const userIdFromCookie = cookieStore.get("userId")?.value;
