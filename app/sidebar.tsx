@@ -2,16 +2,8 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion, LayoutGroup } from "framer-motion";
-import {
-  Bot,
-  Clock,
-  MessageSquare,
-  Plus,
-  SidebarIcon,
-  Speech,
-} from "lucide-react";
+import { Bot, Clock, MessageSquare, SidebarIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { storeSidebarPref } from "./actions";
 
@@ -71,7 +63,10 @@ const Sidebar = ({
             animate={{ width: open ? "19rem" : 0 }}
             className="h-[calc(100lvh-5.5rem)] w-[20rem] overflow-hidden pb-1"
           >
-            <div className="p-4 ml-4 bg-background rounded-lg border shadow h-full overflow-y-auto w-72">
+            <motion.div
+              layoutScroll
+              className="p-4 ml-4 bg-background rounded-lg border shadow h-full overflow-y-auto w-72"
+            >
               <div className="grid text-sm">
                 <Input placeholder="Search history" className="mb-4" />
                 <hr className="mx-2" />
@@ -125,7 +120,7 @@ const Sidebar = ({
                   </AnimatePresence>
                 </LayoutGroup>
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>

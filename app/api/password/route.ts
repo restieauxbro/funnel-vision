@@ -1,9 +1,12 @@
 import { cookies } from "next/headers";
+import { NextRequest } from "next/server";
 
-export async function POST(request: Request, params: { slug: string }) {
+export async function POST(request: NextRequest, params: { slug: string }) {
   const data: { password: string } = await request.json();
   const password = data.password;
 
+  const ip = request.ip;
+  console.log({ ip });
   const cookieStore = cookies();
   const userIdFromCookie = cookieStore.get("userId")?.value;
   const userId = userIdFromCookie ?? crypto.randomUUID();
@@ -22,12 +25,18 @@ export async function POST(request: Request, params: { slug: string }) {
     });
   }
 
+  cookieStore.set("ip-id", ip || "", {
+    httpOnly: true,
+    path: "/",
+    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+  });
+
   cookieStore.set("hasAccess", "true", {
     httpOnly: true,
     path: "/",
   });
 
-  return new Response("password correct", {
+  return new Response(`password correct ${ip}`, {
     status: 200,
   });
 }
