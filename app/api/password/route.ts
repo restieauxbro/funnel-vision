@@ -8,8 +8,6 @@ export async function POST(request: NextRequest, params: { slug: string }) {
   const ip = request.headers.get("X-Forwarded-For");
   console.log({ ip });
   const cookieStore = cookies();
-  const userIdFromCookie = cookieStore.get("userId")?.value;
-  const userId = userIdFromCookie ?? crypto.randomUUID();
 
   if (process.env.PAGE_PASSWORD !== password) {
     return new Response("incorrect password", {
@@ -17,15 +15,7 @@ export async function POST(request: NextRequest, params: { slug: string }) {
     });
   }
 
-  if (!userIdFromCookie) {
-    cookieStore.set("userId", userId, {
-      httpOnly: true,
-      path: "/",
-      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
-    });
-  }
-
-  cookieStore.set("ip-id", ip || "", {
+  cookieStore.set("ip-id", ip || crypto.randomUUID(), {
     httpOnly: true,
     path: "/",
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),

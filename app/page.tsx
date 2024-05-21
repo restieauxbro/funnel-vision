@@ -32,11 +32,11 @@ const Page = async ({
   }
 
   const supabase = createClient();
-  const userId = cookiesStore.get("userId")?.value;
+  const userId = cookiesStore.get("ip-id")?.value;
   const { data: threads, error } = await supabase
     .from("cbt_threads")
     .select("created_at, thread_id, thread_name")
-    .eq("user", userId)
+    .eq("user_ip", userId)
     .order("created_at", { ascending: false })
     .limit(20);
 
@@ -46,7 +46,7 @@ const Page = async ({
     const thread = await openai.beta.threads.create();
     const { data, error } = await supabase
       .from("cbt_threads")
-      .insert({ thread_id: thread.id, user: userId, created_at: new Date() });
+      .insert({ thread_id: thread.id, user_ip: userId, created_at: new Date() });
     console.log(data, error);
     return thread;
   }
