@@ -3,7 +3,7 @@ import Chat from "./chat";
 import { openai } from "@/utils/openai";
 import { cookies } from "next/headers";
 import { Message } from "ai/react";
-import PasswordPromptDialog from "./components/auth/password-prompt";
+import PasswordPromptDialog from "../components/auth/password-prompt";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/server";
 import Sidebar from "./sidebar";
@@ -17,6 +17,12 @@ const Page = async ({
   searchParams: { thread?: string };
 }) => {
   const cookiesStore = cookies();
+  const sidebarCookies = cookiesStore.get("sidebarOpen");
+  const sidebarOpen = sidebarCookies?.value
+    ? sidebarCookies?.value === "true"
+      ? true
+      : false
+    : true;
 
   const loginCookies = cookiesStore.get("hasAccess");
   const isLoggedIn = !!loginCookies?.value;
@@ -81,9 +87,9 @@ const Page = async ({
   return (
     <div className="flex">
       <div className="hidden lg:block">
-        <Sidebar {...{ threads }} />
+        <Sidebar {...{ threads, openPreference: sidebarOpen }} />
       </div>
-      <div className="relative min-h-lvh grid place-items-center grow">
+      <div className="relative min-h-lvh grow">
         <div className="p-0">
           <div className="fixed top-0 right-0 m-4">
             <form action={handleLogOut}>

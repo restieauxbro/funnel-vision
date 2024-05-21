@@ -1,7 +1,13 @@
 import { openai } from "@/utils/openai";
 import { AssistantResponse } from "ai";
+import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
+  const hasAccess = cookies().get("hasAccess")?.value === "true" ?? false;
+  if (!hasAccess) {
+    return new Response("Unauthorized, no access cookie", { status: 401 });
+  }
+
   // Parse the request body
   const input: {
     threadId: string | null;
