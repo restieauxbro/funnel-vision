@@ -58,25 +58,25 @@ const Sidebar = ({
           </Link>
         </div>
         <div>
-          <motion.div
-            initial={{ width: openPreference ? "19rem" : 0 }}
-            animate={{ width: open ? "19rem" : 0 }}
-            className="h-[calc(100lvh-5.5rem)] w-[20rem] overflow-hidden pb-1"
-          >
+          <LayoutGroup>
             <motion.div
-              layoutScroll
-              className="p-4 ml-4 bg-background rounded-lg border shadow h-full overflow-y-auto w-72"
+              initial={{ width: openPreference ? "19rem" : 0 }}
+              animate={{ width: open ? "19rem" : 0 }}
+              className="h-[calc(100lvh-5.5rem)] w-[20rem] overflow-hidden pb-1"
             >
-              <div className="grid text-sm">
-                <Input placeholder="Search history" className="mb-4" />
-                <hr className="mx-2" />
-                <LayoutGroup>
+              <motion.div
+                layoutScroll
+                className="p-4 ml-4 bg-background rounded-lg border shadow overflow-y-auto h-full w-72"
+              >
+                <div className="grid text-sm">
+                  <Input placeholder="Search history" className="mb-4" />
+                  <hr className="mx-2" />
                   <AnimatePresence>
                     {threads
                       ?.filter((x) => x.thread_name !== "New chat")
                       .map((thread) => (
                         <motion.div
-                          layout
+                          //layout
                           key={thread.thread_id}
                           transition={{
                             type: "spring",
@@ -118,10 +118,10 @@ const Sidebar = ({
                         </motion.div>
                       ))}
                   </AnimatePresence>
-                </LayoutGroup>
-              </div>
+                </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </LayoutGroup>
         </div>
       </div>
     </div>

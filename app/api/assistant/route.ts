@@ -3,9 +3,13 @@ import { AssistantResponse } from "ai";
 import { cookies } from "next/headers";
 
 export async function POST(req: Request) {
-  const hasAccess = cookies().get("hasAccess")?.value === "true" ?? false;
-  if (!hasAccess) {
-    return new Response("Unauthorized, no access cookie", { status: 401 });
+  const cookieStore = cookies();
+  const hasAccess = cookieStore.get("hasAccess")?.value === "true" ?? false;
+  const storedIp = cookieStore.get("ip-id")?.value;
+  if (!hasAccess || !storedIp) {
+    cookieStore.delete("ip-id");
+    cookieStore.delete("hasAccess");
+    return new Response("Unauthorized, try logging in", { status: 401 });
   }
 
   // Parse the request body

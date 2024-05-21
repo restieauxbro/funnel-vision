@@ -26,7 +26,18 @@ export default function Chat({
     handleInputChange,
     setMessages,
     append,
-  } = useAssistant({ api: "/api/assistant", threadId });
+  } = useAssistant({
+    api: "/api/assistant",
+    threadId,
+    onError: (err) => {
+      console.log(err.cause, err.message)
+      if (err) {
+        // if unauthorized, redirect to login
+        router.refresh();
+      }
+    },
+  });
+
   const supabase = createClient();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -73,7 +84,7 @@ export default function Chat({
     <>
       <div className="sticky top-4 left-0 m-4 inline-block">
         <Button
-        className="aspect-square p-2"
+          className="aspect-square p-2"
           onClick={() => {
             router.push(`/?new=${newChatNumber + 1}`);
             router.refresh();
@@ -84,7 +95,7 @@ export default function Chat({
           </div>
         </Button>
       </div>
-      <div className="grid place-items-center pt-6 min-h-(calc(100lvh-6rem))">
+      <div className="grid place-items-center pt-6 min-h-[calc(100lvh-6rem)]">
         <div className="w-screen max-w-screen-sm py-12">
           <div className="pb-32">
             <LayoutGroup>

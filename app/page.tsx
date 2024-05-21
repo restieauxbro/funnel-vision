@@ -44,10 +44,13 @@ const Page = async ({
 
   async function createThread() {
     const thread = await openai.beta.threads.create();
-    const { data, error } = await supabase
+    await supabase
       .from("cbt_threads")
-      .insert({ thread_id: thread.id, user_ip: userId, created_at: new Date() });
-    console.log(data, error);
+      .insert({
+        thread_id: thread.id,
+        user_ip: userId,
+        created_at: new Date(),
+      });
     return thread;
   }
   // if empty thread has already been created, use that
