@@ -38,12 +38,6 @@ const Sidebar = ({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const sidebarPanel = searchParams.get("sidebar");
-  const generateLinkWithParam = (newParams: Record<string, string>) =>
-    linkWithAddedParam({
-      newParams,
-      existingParams: searchParams,
-      pathname,
-    });
 
   const [isClient, setIsClient] = useState(false);
   useEffect(() => {
@@ -51,8 +45,8 @@ const Sidebar = ({
   }, []);
 
   return (
-    <div className="sticky top-0 h-lvh bg-slate-100 border-r p-4 pl-4">
-      <div className="flex gap-4 mb-4 justify-between flex-row-reverse relative">
+    <div className="sticky top-0 h-lvh bg-slate-100 border-r pt-4 pl-4 pr-2">
+      <div className="flex gap-4 mb-4 mr-2 justify-between flex-row-reverse relative">
         <SideBarPanelButton {...{ changeOpenState, open }} />
       </div>
       <div className="flex">
@@ -61,20 +55,23 @@ const Sidebar = ({
             {
               icon: <Clock size={20} />,
               text: "History",
-              link: generateLinkWithParam({ sidebar: "history" }),
+              slug: "history",
             },
             {
               icon: <Bot size={20} />,
               text: "Bots",
-              link: generateLinkWithParam({ sidebar: "bots" }),
+              slug: "bots",
             },
             {
               icon: <Bot size={20} />,
               text: "Bongo",
-              link: generateLinkWithParam({ sidebar: "bongo" }),
+              slug: "bongo",
             },
-          ].map(({ icon, text, link }) => (
-            <Link href={link} key={text}>
+          ].map(({ icon, text, slug }) => (
+            <Link
+              href={`${pathname}${slug}?${searchParams.toString()}`}
+              key={text}
+            >
               <TooltipProvider>
                 <Tooltip delayDuration={100}>
                   <TooltipTrigger>
@@ -95,9 +92,9 @@ const Sidebar = ({
         </div>
         <div>
           <motion.div
-            initial={{ width: openPreference ? "19rem" : 0 }}
-            animate={{ width: open ? "19rem" : 0 }}
-            className="h-[calc(100lvh-5.5rem)] w-[20rem] overflow-hidden pb-1"
+            initial={{ width: openPreference ? "20rem" : 0 }}
+            animate={{ width: open ? "20rem" : 0 }}
+            className="h-[calc(100lvh-5.5rem)] w-[20rem] overflow-hidden pb-2"
           >
             <AnimatePresence mode="wait">
               {sidebarContent({ str: sidebarPanel, threads, isClient })}
@@ -149,12 +146,7 @@ const Panel = ({
   isClient: boolean;
 }) => {
   return (
-    <motion.div
-      className="p-4 ml-4 bg-background rounded-lg border shadow overflow-y-auto h-full w-72"
-      initial={{ opacity: isClient ? 0 : 1 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0, transition: { duration: 5 } }}
-    >
+    <motion.div className="p-4 ml-4 bg-background rounded-lg border shadow-md overflow-y-auto h-full w-[18.5rem]">
       {children}
     </motion.div>
   );
