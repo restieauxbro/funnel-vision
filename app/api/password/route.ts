@@ -6,7 +6,7 @@ export async function POST(request: NextRequest, params: { slug: string }) {
   const password = data.password;
 
   const ip = request.headers.get("X-Forwarded-For");
-  console.log({ ip });
+  const ipId = (ip === "::1" ? crypto.randomUUID() : ip) as string;
   const cookieStore = cookies();
 
   if (process.env.PAGE_PASSWORD !== password) {
@@ -15,7 +15,7 @@ export async function POST(request: NextRequest, params: { slug: string }) {
     });
   }
 
-  cookieStore.set("ip-id", ip || crypto.randomUUID(), {
+  cookieStore.set("ip-id", ip || '', {
     httpOnly: true,
     path: "/",
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),

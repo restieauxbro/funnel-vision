@@ -10,6 +10,7 @@ import ResizingContainer from "../components/animations/resizing-container";
 import { cn } from "@/lib/utils";
 import { Baby, Beaker, DollarSign, Plus, Sparkles, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import NewChatButton from "./side-bar-buttons";
 
 export default function Chat({
   threadId,
@@ -30,7 +31,7 @@ export default function Chat({
     api: "/api/assistant",
     threadId,
     onError: (err) => {
-      console.log(err.cause, err.message)
+      console.log(err.cause, err.message);
       if (err) {
         // if unauthorized, redirect to login
         router.refresh();
@@ -83,17 +84,7 @@ export default function Chat({
   return (
     <>
       <div className="sticky top-4 left-0 m-4 inline-block">
-        <Button
-          className="aspect-square p-2"
-          onClick={() => {
-            router.push(`/?new=${newChatNumber + 1}`);
-            router.refresh();
-          }}
-        >
-          <div className="flex gap-2 items-center">
-            <Plus size={16} strokeWidth={2.5} />
-          </div>
-        </Button>
+        <NewChatButton {...{ newChatNumber }} />
       </div>
       <div className="grid place-items-center pt-6 min-h-[calc(100lvh-6rem)]">
         <div className="w-screen max-w-screen-sm py-12">

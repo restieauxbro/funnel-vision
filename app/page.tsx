@@ -96,9 +96,9 @@ const Page = async ({
         <div className="p-0">
           <div className="fixed top-0 right-0 m-4">
             <form action={handleLogOut}>
-              <Button type="submit" size="sm" variant={"secondary"}>
+              <Button type="submit" variant={"secondary"} className="aspect-square p-2">
                 <div className="flex gap-1.5 items-center">
-                  Log out <LogOut size={14} strokeWidth={2.5} />
+                  <LogOut size={16} strokeWidth={2.5} />
                 </div>
               </Button>
             </form>
