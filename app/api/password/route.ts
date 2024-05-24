@@ -15,7 +15,7 @@ export async function POST(request: NextRequest, params: { slug: string }) {
     });
   }
 
-  cookieStore.set("ip-id", ip || '', {
+  cookieStore.set("ip-id", ipId || '', {
     httpOnly: true,
     path: "/",
     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),

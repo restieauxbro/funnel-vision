@@ -6,11 +6,10 @@ import { Input } from "@/components/ui/input";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion, LayoutGroup } from "framer-motion";
-import ResizingContainer from "../components/animations/resizing-container";
+import ResizingContainer from "../../components/animations/resizing-container";
 import { cn } from "@/lib/utils";
 import { Baby, Beaker, DollarSign, Plus, Sparkles, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import NewChatButton from "./side-bar-buttons";
 
 export default function Chat({
   threadId,
@@ -84,7 +83,17 @@ export default function Chat({
   return (
     <>
       <div className="sticky top-4 left-0 m-4 inline-block">
-        <NewChatButton {...{ newChatNumber }} />
+        <Button
+          className="aspect-square p-2"
+          onClick={() => {
+            router.push(`/chat?new=${newChatNumber + 1}`);
+            router.refresh();
+          }}
+        >
+          <div className="flex gap-2 items-center">
+            <Plus size={16} strokeWidth={2.5} />
+          </div>
+        </Button>
       </div>
       <div className="grid place-items-center pt-6 min-h-[calc(100lvh-6rem)]">
         <div className="w-screen max-w-screen-sm py-12">
